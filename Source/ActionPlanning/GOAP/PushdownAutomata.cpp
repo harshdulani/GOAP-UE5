@@ -1,5 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "PushdownAutomata.h"
+
+#include "IdleState.h"
 #include "GameFramework/Character.h"
 #include "MoveToState.h"
 #include "State.h"
@@ -11,12 +13,13 @@ UPushdownAutomata::UPushdownAutomata()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	
+	IdleState = CreateDefaultSubobject <UIdleState>(TEXT("IdleState"));
 }
 
 UPushdownAutomata::~UPushdownAutomata()
 {
 	StateStack.Empty();
+	IdleState = nullptr;
 }
 
 // Called when the game starts
@@ -25,7 +28,7 @@ void UPushdownAutomata::BeginPlay()
 	Super::BeginPlay();
 
 	// Add idle state to stack
-	
+	StateStack.Push(IdleState);
 }
 
 

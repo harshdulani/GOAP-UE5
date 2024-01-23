@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "PushdownAutomata.generated.h"
 
+class UIdleState;
 class UState;
 
 UCLASS( ClassGroup=(GOAP), meta=(BlueprintSpawnableComponent) )
@@ -30,20 +31,7 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = true))
 	TArray<UState*> StateStack;
-	
-	/*
-	private static readonly IdleState IdleState = new IdleState();
 
-	private void Start()
-	{
-		Stack.Push(IdleState);
-	}
-
-	public static float CreateMoveState(AgentController agent, Vector3 position)
-	{
-		var moveState = new MoveState(agent, position);
-		Stack.Push(moveState);
-		return moveState.GetDistanceToDest();
-	}
-	*/
+	UPROPERTY()
+	UIdleState* IdleState;
 };
