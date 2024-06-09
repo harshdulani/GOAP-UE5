@@ -1,10 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "PushdownAutomata.h"
-
-#include "IdleState.h"
+#include "GOAP/PushdownAutomata.h"
+#include "GOAP/IdleState.h"
 #include "GameFramework/Character.h"
-#include "MoveToState.h"
-#include "State.h"
+#include "GOAP/MoveToState.h"
+#include "GOAP/State.h"
 
 // Sets default values for this component's properties
 UPushdownAutomata::UPushdownAutomata()
@@ -31,14 +30,27 @@ void UPushdownAutomata::BeginPlay()
 	StateStack.Push(IdleState);
 }
 
-
 // Called every frame
 void UPushdownAutomata::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	const auto State = StateStack.Top();
+	FString StateName("IdleState");
+	if(!Cast<UIdleState>(State))
+	{
+		if(Cast<UMoveToState>(State))
+		{
+			StateName = "MoveToState";
+		}
+		else
+		{
+			StateName = "Invalid";
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("State = %s"), *StateName);
 	// if success in executing state, return
-	if(StateStack.Top()->Execute())
+	if(State->Execute(DeltaTime))
 	{
 		return;
 	}
@@ -50,8 +62,7 @@ void UPushdownAutomata::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 float UPushdownAutomata::PushNewMoveState(ACharacter* Character, FVector Location)
 {
 	UMoveToState* NewState = NewObject<UMoveToState>();
-	NewState->Initialise(Character, Location);
+	NewState->InitialiseLocation(Character, Location);
 	StateStack.Push(NewState);
 	return NewState->GetDistanceToDestination();
 }
-

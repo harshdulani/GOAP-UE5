@@ -13,7 +13,7 @@ class ACTIONPLANNING_API UState : public UObject
 public:
 	
 	// Return true if should stay inside this state, false if should exit
-	virtual bool Execute()
+	virtual bool Execute(const float DeltaTime)
 	PURE_VIRTUAL(UState::Execute, return true;);
 
 	virtual void Print();

@@ -15,5 +15,5 @@ class ACTIONPLANNING_API UIdleState : public UState
 	GENERATED_BODY()
 
 public:
-	bool Execute() override;
+	bool Execute(const float DeltaTime) override;
 };
